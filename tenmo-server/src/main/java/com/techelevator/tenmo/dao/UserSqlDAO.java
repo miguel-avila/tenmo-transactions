@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -80,9 +81,19 @@ public class UserSqlDAO implements UserDAO {
 
 	//Gets Account Balance for a user
 	@Override
-	public double findBalanceByUserId(int id) {
-		String sql = "SELECT (balance) FROM accounts WHERE user_id = ?";
-		return jdbcTemplate.queryForObject(sql, double.class, id);
+	public Account findBalanceByUserId(int id) {
+		String sql = "SELECT account_id, user_id, balance FROM accounts WHERE user_id = ?";
+		SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
+		Account account = mapRowToAccount(result);
+		return account;
+	}
+	
+	private Account mapRowToAccount(SqlRowSet rs) {
+		Account account = new Account();
+		account.setAccountId(rs.getInt("account_id"));
+		account.setUserId(rs.getInt("user_id"));
+		account.setBalance(rs.getDouble("balance"));
+		return account;
 	}
 	
 	private User mapRowToUser(SqlRowSet rs) {

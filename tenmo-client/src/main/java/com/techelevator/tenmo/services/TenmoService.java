@@ -13,9 +13,9 @@ public class TenmoService {
 
 	//Gets Account Balance for a user
 	public double getBalance(int id) {
-	//TODO need to add authentication
+	//TODO need to add authentication?
 		
 		return restTemplate.getForObject(BASE_URL + "user/" + id + "/balance", double.class);
 	}
-	
+//setter for auth token	
 }
