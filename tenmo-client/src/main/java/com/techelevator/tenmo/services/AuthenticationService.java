@@ -80,4 +80,12 @@ public class AuthenticationService {
 		}
 		return message;
 	}
+	
+	//helper method
+	public static HttpEntity makeAuthEntity(String token) {
+		    HttpHeaders headers = new HttpHeaders();
+		    headers.setBearerAuth(token);
+		    HttpEntity entity = new HttpEntity<>(headers);
+		    return entity;
+		  }
 }
