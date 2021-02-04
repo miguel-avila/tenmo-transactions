@@ -1,4 +1,4 @@
-package com.techelevator.tenmo.model;
+package com.techelevator.tenmo.models;
 
 public class Account {
 
@@ -6,32 +6,29 @@ public class Account {
 	private int accountId;
 	private double balance;
 	
-	public Account() { };
-	
 	public int getUserId() {
 		return userId;
-	}
-	
-	public int getAccountId() {
-		return accountId;
-	}
-	
-	public double getBalance() {
-		return balance;
 	}
 	
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	
+	public int getAccountId() {
+		return accountId;
+	}
+	
 	public void setAccountId(int accountId) {
 		this.accountId = accountId;
+	}
+	
+	public double getBalance() {
+		return balance;
 	}
 	
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
-	
-	
+
 	
 }

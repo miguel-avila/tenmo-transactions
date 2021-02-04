@@ -72,7 +72,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewCurrentBalance() {
 		System.out.println("Your current account balance is: $" + 
-				service.getBalance(currentUser.getUser().getId()));
+				service.getBalance(currentUser.getUser().getId()).getBalance());
 	}
 
 	private void viewTransferHistory() {
