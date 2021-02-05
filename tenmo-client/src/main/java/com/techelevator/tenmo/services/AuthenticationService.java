@@ -81,7 +81,7 @@ public class AuthenticationService {
 		return message;
 	}
 	
-	//helper method
+	//helper method to authenticate with an API
 	public static HttpEntity makeAuthEntity(String token) {
 		    HttpHeaders headers = new HttpHeaders();
 		    headers.setBearerAuth(token);

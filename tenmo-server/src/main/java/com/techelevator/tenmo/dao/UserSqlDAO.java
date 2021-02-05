@@ -91,7 +91,8 @@ public class UserSqlDAO implements UserDAO {
 			throw new UsernameNotFoundException("");
 		}
 	}
-	
+
+	//creates Account object from SQL row
 	private Account mapRowToAccount(SqlRowSet rs) {
 		Account account = new Account();
 		account.setAccountId(rs.getInt("account_id"));
