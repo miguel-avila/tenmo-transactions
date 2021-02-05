@@ -52,14 +52,14 @@ public class TenmoController {
 	// to--helper methods
 	
 	@RequestMapping(path = "/transfers/sendmoney", method = RequestMethod.POST)
-	public boolean sendMoney(@Valid @RequestBody TransferRequest request, Principal principal) throws Exception {
+	public boolean sendMoney(@Valid @RequestBody TransferRequest request, Principal principal) throws IllegalTransferRequest {
 		// TODO get userID out of principal like up above, validate that principal id is
 		// == fromUserID
 		String username = principal.getName();
 		int userId = this.userDAO.findIdByUsername(username);
 		if (request.getFromUserId() != userId) {
 			//TODO throw custom exception that throws 403 forbidden
-			throw IllegalTransferRequest
+			throw new IllegalTransferRequest();
 		}
 		
 		return this.transferDAO.create(request.getFromUserId(), request.getToUserId(), request.getAmount());
