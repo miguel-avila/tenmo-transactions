@@ -16,11 +16,21 @@ public class TenmoController {
 	public TenmoController(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
-	
+	//potentially replace id with "me"
 	//Gets Account Balance for a user
 	@RequestMapping(path = "/user/{id}/balance", method = RequestMethod.GET)
 	public Account getBalance(@PathVariable int id) {
 		return userDAO.findBalanceByUserId(id);
 	}
+	//transferhistory()
+	//pendingtransfers
+	//sendbucks--use user-id to "put" aka update balance transfer from and to--helper methods
+	//requestTransfer -- use user-id to   -- helper methods
+	/*@RequestMapping(path = "/users", method = RequestMethod.GET){
+	public List<User> list() {
+		return userDAO.();
+	}
+	*/
 	
-}
+	}
+
