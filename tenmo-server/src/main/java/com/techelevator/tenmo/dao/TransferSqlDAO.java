@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.techelevator.tenmo.model.Transfer;
@@ -29,15 +30,20 @@ public class TransferSqlDAO implements TransferDAO {
 			Transfer transfer = mapRowToTransfer(results);
 			transfers.add(transfer);
 		}
-		
 		return transfers;
 	}
 
 	//Step 6. Retrieves the details of a transfer based upon the transfer ID
 	@Override
 	public Transfer getTransferById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM transfers WHERE transfer_id = ?";
+		SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
+		if(result.next()) {
+			Transfer transfer = mapRowToTransfer(result);
+			return transfer;
+		} else {
+			throw new UsernameNotFoundException("");
+		}
 	}
 
 	//Step 4.2 Creates a transfer including User IDs and the amount of TE Bucks.
