@@ -10,10 +10,10 @@ public interface TransferDAO {
 	
 	Transfer getTransferById(int id);
 	
-	boolean create(int account_from, int account_to, double amount);
+	boolean create(int accountFrom, int accountTo, double amount);
 	
-	boolean increaseBalance(int account_to, double amount);
+	boolean increaseBalance(int accountTo, double amount);
 	
-	boolean decreaseBalance(int account_from, double amount);
+	boolean decreaseBalance(int accountFrom, double amount);
 	
 }
