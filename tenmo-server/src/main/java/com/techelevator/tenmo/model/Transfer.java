@@ -13,7 +13,7 @@ public class Transfer {
 	
 	public Transfer(long transfer_id, int transfer_type_id, int transfer_status_id, 
 			int account_from, int account_to, double amount) {
-		
+		//fix naming conventions, we can't have underscores
 		this.transfer_id = transfer_id;
 		this.transfer_type_id = transfer_type_id;
 		this.transfer_status_id = transfer_status_id;

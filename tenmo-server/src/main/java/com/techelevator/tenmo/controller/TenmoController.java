@@ -46,8 +46,13 @@ public class TenmoController {
 		return transferDAO.findAll(userId);
 	}
 
-	// pendingtransfers
-
+	// OPTIONAL pendingtransfers
+	@RequestMapping(path = "/transfers/pendingtransfers", method = RequestMethod.GET)
+	public List<Transfer> getPendingTransfers(Principal principal) {
+		String username = principal.getName();
+		int userId = this.userDAO.findIdByUsername(username);
+		return null;
+	}
 	// sendbucks--use user-id to "put" aka update balance transfer from and
 	// to--helper methods
 	

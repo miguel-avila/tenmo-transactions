@@ -1,5 +1,5 @@
 package com.techelevator.tenmo.model;
-
+//TransferInput
 public class TransferRequest {
 
 	private int fromUserId;
