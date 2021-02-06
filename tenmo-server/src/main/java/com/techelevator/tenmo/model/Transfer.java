@@ -2,64 +2,65 @@ package com.techelevator.tenmo.model;
 
 public class Transfer {
 
-	private long transfer_id;
-	private int transfer_type_id;
-	private int transfer_status_id;
-	private int account_from;
-	private int account_to;
+	private long transferId;
+	private int transferTypeId;
+	private int transferStatusId;
+	private int accountFrom;
+	private int accountTo;
 	private double amount;
-	
-	public Transfer() {};
-	
-	public Transfer(long transfer_id, int transfer_type_id, int transfer_status_id, 
-			int account_from, int account_to, double amount) {
-		//fix naming conventions, we can't have underscores
-		this.transfer_id = transfer_id;
-		this.transfer_type_id = transfer_type_id;
-		this.transfer_status_id = transfer_status_id;
-		this.account_from = account_from;
-		this.account_to = account_to;
+
+	public Transfer() {
+	};
+
+	public Transfer(long transferId, int transferTypeId, int transferStatusId, int accountFrom, int accountTo,
+			double amount) {
+
+		this.transferId = transferId;
+		this.transferTypeId = transferTypeId;
+		this.transferStatusId = transferStatusId;
+		this.accountFrom = accountFrom;
+		this.accountTo = accountTo;
 		this.amount = amount;
 	}
 
-	public long getTransfer_id() {
-		return transfer_id;
+	public long getTransferId() {
+		return transferId;
 	}
 
-	public void setTransfer_id(long transfer_id) {
-		this.transfer_id = transfer_id;
+	public void setTransferId(long transferId) {
+		this.transferId = transferId;
 	}
 
-	public int getTransfer_type_id() {
-		return transfer_type_id;
+	public int getTransferTypeId() {
+		return transferTypeId;
 	}
 
-	public void setTransfer_type_id(int transfer_type_id) {
-		this.transfer_type_id = transfer_type_id;
+	public void setTransferTypeId(int transferTypeId) {
+		this.transferTypeId = transferTypeId;
 	}
 
-	public int getTransfer_status_id() {
-		return transfer_status_id;
+	public int getTransferStatusId() {
+		return transferStatusId;
 	}
 
-	public void setTransfer_status_id(int transfer_status_id) {
-		this.transfer_status_id = transfer_status_id;
+	public void setTransferStatusId(int transferStatusId) {
+		this.transferStatusId = transferStatusId;
 	}
 
-	public int getAccount_from() {
-		return account_from;
+	public int getAccountFrom() {
+		return accountFrom;
 	}
 
-	public void setAccount_from(int account_from) {
-		this.account_from = account_from;
+	public void setAccountFrom(int accountFrom) {
+		this.accountFrom = accountFrom;
 	}
 
-	public int getAccount_to() {
-		return account_to;
+	public int getAccountTo() {
+		return accountTo;
 	}
 
-	public void setAccount_to(int account_to) {
-		this.account_to = account_to;
+	public void setAccountTo(int accountTo) {
+		this.accountTo = accountTo;
 	}
 
 	public double getAmount() {
@@ -69,6 +70,5 @@ public class Transfer {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	
-	
+
 }

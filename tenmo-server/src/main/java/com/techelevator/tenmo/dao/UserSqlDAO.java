@@ -82,14 +82,13 @@ public class UserSqlDAO implements UserDAO {
 	//Gets Account Balance for a user
 	@Override
 	public Account findBalanceByUserId(int id) {
+		Account account = null;
 		String sql = "SELECT account_id, user_id, balance FROM accounts WHERE user_id = ?";
 		SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
 		if(result.next()) {
-			Account account = mapRowToAccount(result);
-			return account;
-		} else {
-			throw new UsernameNotFoundException("");
+			account = mapRowToAccount(result);
 		}
+			return account;
 	}
 
 	//creates Account object from SQL row

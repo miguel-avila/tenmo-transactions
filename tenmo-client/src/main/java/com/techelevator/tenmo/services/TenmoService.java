@@ -18,10 +18,9 @@ public class TenmoService {
 
 	//Gets Account Balance for a user
 	public Account getBalance(AuthenticatedUser currentUser) {
-		int id = currentUser.getUser().getId();
 		String token = currentUser.getToken(); 
 		HttpEntity entity = AuthenticationService.makeAuthEntity(token);
-		String url = BASE_URL + "user/" + id + "/balance";
+		String url = BASE_URL + "user/me/balance";
 		return restTemplate.exchange(url, HttpMethod.GET, entity, Account.class).getBody();
 	}
 
