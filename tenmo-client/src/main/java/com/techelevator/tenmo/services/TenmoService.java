@@ -38,7 +38,7 @@ public class TenmoService {
 		String url = BASE_URL + "user/me/balance";
 		return restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Account.class).getBody();
 	}
-	public User[] getAllUsers(AuthenticatedUser currentUser) throws TenmoServiceException{
+	public User[] getAllUsers() throws TenmoServiceException{
 		//int id = currentUser.getUser().getId();
 		
 		String url = BASE_URL + "/allusers";
