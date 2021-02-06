@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
+import com.techelevator.tenmo.model.UserNotFound;
 
 @RestController
 public class UserController {
@@ -23,8 +24,8 @@ public class UserController {
 	public List<User> listUsers(){
 		return userDAO.findAll();
 	}
-	@RequestMapping(path = "/user", method = RequestMethod.GET)
-	public User userById() {
-		return userDAO.
+	@RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
+	public User findUserById(@PathVariable int id) throws UserNotFound{
+		return userDAO.findUserById(id);
 	}
 }

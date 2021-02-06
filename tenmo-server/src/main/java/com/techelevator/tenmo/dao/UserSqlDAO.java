@@ -2,6 +2,8 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
+import com.techelevator.tenmo.model.UserNotFound;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -18,7 +20,7 @@ public class UserSqlDAO implements UserDAO {
 
     private static final double STARTING_BALANCE = 1000;
     private JdbcTemplate jdbcTemplate;
-
+    private List<User> allUsers = new ArrayList<>();
     public UserSqlDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -30,16 +32,16 @@ public class UserSqlDAO implements UserDAO {
 
     @Override
     public List<User> findAll() {
-        List<User> users = new ArrayList<>();
+        
         String sql = "select * from users";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while(results.next()) {
             User user = mapRowToUser(results);
-            users.add(user);
+            allUsers.add(user);
         }
 
-        return users;
+        return allUsers;
     }
 
     @Override
@@ -91,14 +93,13 @@ public class UserSqlDAO implements UserDAO {
 			return account;
 	}
 	@Override
-	public User findUsernameById(int id) {
-		User user = null;
-		String sql = "SELECT user_id, username FROM  users WHERE user_id = ?";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
-		if(result.next()) {
-			user = mapRowToUser(result);
+	public User findUserById(int id){
+		for (User user : allUsers) {
+			if (user.getId() == id) {
+				return user;
+			}
 		}
-		return user;
+		return null;
 	}
 
 	//creates Account object from SQL row
@@ -112,7 +113,7 @@ public class UserSqlDAO implements UserDAO {
 	
 	private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
-        user.setId(rs.getLong("user_id"));
+        user.setId(rs.getInt("user_id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password_hash"));
         user.setActivated(true);

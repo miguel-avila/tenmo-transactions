@@ -6,6 +6,8 @@ import java.util.Scanner;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
+import com.techelevator.tenmo.models.TransferRequest;
+
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.tenmo.services.TenmoService;
@@ -97,10 +99,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			
 			System.out.println((i+1) + " | " + allUsers[i].getUsername());
 		}
-		
-		console.getUserInputInteger("Enter User Id to send money to");
-		User toUserInput = service.getUserbyId();
-		if (in.nextLine() = toUserInput) {
+		System.out.println("Enter User Id to send money to:");
+		String toUserInput = in.nextLine();
+		int userId = console.getUserInputInteger(toUserInput);
+		service.sendMoney(currentUser, userId);
 			
 		}
 		

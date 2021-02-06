@@ -93,7 +93,7 @@ public class TransferSqlDAO implements TransferDAO {
 	//creates Transfer object from SQL row
 	private Transfer mapRowToTransfer(SqlRowSet rs) {
 		Transfer transfer = new Transfer();
-		transfer.setTransferId(rs.getLong("transfer_id"));
+		transfer.setTransferId(rs.getInt("transfer_id"));
 		transfer.setTransferTypeId(rs.getInt("transfer_type_id"));
 		transfer.setTransferStatusId(rs.getInt("transfer_status_id"));
 		transfer.setAccountFrom(rs.getInt("account_from"));

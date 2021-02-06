@@ -4,7 +4,10 @@ import java.util.List;
 
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
@@ -20,54 +23,77 @@ public class TenmoService {
 	
 	private String BASE_URL;
 	private final RestTemplate restTemplate = new RestTemplate();
+	public static String AUTH_TOKEN = "";
+	private final String INVALID_TRANSFER_MSG = "Invalid Transfer. Please enter the UserId and Amount separated by a comma.";
 	
 	
 	
 	public TenmoService(String url) {
-		this.BASE_URL = url;
+		BASE_URL = url;
 	}
 
 	//Gets Account Balance for a user
 	public Account getBalance(AuthenticatedUser currentUser) {
-		String token = currentUser.getToken(); 
-		HttpEntity entity = AuthenticationService.makeAuthEntity(token);
+		
 		String url = BASE_URL + "user/me/balance";
-		return restTemplate.exchange(url, HttpMethod.GET, entity, Account.class).getBody();
+		return restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Account.class).getBody();
 	}
-	public User[] getAllUsers() {
-		/*int id = currentUser.getUser().getId();*/
-		//String token = currentUser.getToken(); 
-		//HttpEntity entity = AuthenticationService.makeAuthEntity(token);
+	public User[] getAllUsers(AuthenticatedUser currentUser) throws TenmoServiceException{
+		//int id = currentUser.getUser().getId();
+		
 		String url = BASE_URL + "/allusers";
 		User[] allUsers = null;
 		try {
-			allUsers = restTemplate.getForObject(url, User[].class);
+			allUsers = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
 		} catch (RestClientResponseException ex) {
-		} catch (ResourceAccessException ex) {
+			throw new TenmoServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
+		
 		}
 		return allUsers;
 	}
 	
 	//I may be wrong here but In our app, I feel like we need this method to continue
-	public User getUserbyId() {
-		return null;
+	public User getUserbyId(long id) throws TenmoServiceException {
+		String url = BASE_URL + "/user/{id}";
+		User user = null;
+		try {
+			user = restTemplate.exchange(url + id, HttpMethod.GET, makeAuthEntity(), User.class).getBody();
+		} catch (RestClientResponseException ex) {
+		throw new TenmoServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
+		}
+		return user;
 	}
-	public TransferRequest sendMoney(AuthenticatedUser currentUser, TransferRequest toUser) {
-		String token = currentUser.getToken(); 
-		HttpEntity entity = AuthenticationService.makeAuthEntity(token);
-		String url = BASE_URL + "/transfers/sendmoney";
-		TransferRequest toUserId = toUser;
-		if (toUserId == null) {
-			return null;
+	public TransferRequest sendMoney(AuthenticatedUser currentUser, TransferRequest request) throws TenmoServiceException{
+	
+		
+		TransferRequest transfer = request;
+		if (transfer == null) {
+			throw new TenmoServiceException(INVALID_TRANSFER_MSG);
 		}
 		 try {
-		      toUserId = restTemplate.postForObject(url, entity, TransferRequest.class);
+			 String url = BASE_URL + "/transfers/sendmoney";
+			 HttpEntity<TransferRequest> entity = makeTransferEntity(transfer);
+			 return restTemplate.exchange(url, HttpMethod.POST, entity, TransferRequest.class).getBody();
 		    } catch (RestClientResponseException ex) {
-		      
-		    } catch (ResourceAccessException ex) {
+		      throw new TenmoServiceException("Unable to initiate your transfer, please try again later.");
+		   
 		      
 		    }
-		    return toUserId;
+		    
 	}
+	 private HttpEntity<TransferRequest> makeTransferEntity(TransferRequest transfer) {
+		    HttpHeaders headers = new HttpHeaders();
+		    headers.setContentType(MediaType.APPLICATION_JSON);
+		    headers.setBearerAuth(AUTH_TOKEN);
+		    HttpEntity<TransferRequest> entity = new HttpEntity<>(transfer, headers);
+		    return entity;
+		  }
+	private HttpEntity makeAuthEntity() {
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setBearerAuth(AUTH_TOKEN);
+	    HttpEntity entity = new HttpEntity<>(headers);
+	    return entity;
+	  }
+	
 
 }
