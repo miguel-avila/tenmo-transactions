@@ -1,6 +1,10 @@
 package com.techelevator.tenmo;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import com.techelevator.tenmo.models.AuthenticatedUser;
+import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
@@ -27,6 +31,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private ConsoleService console;
     private AuthenticationService authenticationService;
     private TenmoService service;
+    private Scanner in;
 
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
@@ -86,6 +91,20 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
+		
+		User[] allUsers = service.getAllUsers();
+		for (int i = 0; i < allUsers.length; i++) {
+			
+			System.out.println((i+1) + " | " + allUsers[i].getUsername());
+		}
+		
+		console.getUserInputInteger("Enter User Id to send money to");
+		User toUserInput = service.getUserbyId();
+		if (in.nextLine() = toUserInput) {
+			
+		}
+		
+		
 		// TODO Auto-generated method stub
 		
 	}

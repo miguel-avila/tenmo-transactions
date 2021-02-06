@@ -16,4 +16,6 @@ public interface UserDAO {
     boolean create(String username, String password);
     
     Account findBalanceByUserId(int userId);
+    
+    User findUsernameById(int userId);
 }
