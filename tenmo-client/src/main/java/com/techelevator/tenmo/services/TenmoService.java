@@ -63,16 +63,16 @@ public class TenmoService {
 		}
 		return user;
 	}
-	public TransferRequest sendMoney(AuthenticatedUser currentUser, TransferRequest request) throws TenmoServiceException{
+	public TransferRequest sendMoney(TransferRequest request, double amount) throws TenmoServiceException{
 	
-		
-		TransferRequest transfer = request;
-		if (transfer == null) {
+		double amountToSend = amount;
+		TransferRequest transferTo = request;
+		if (transferTo == null || amountToSend <= 0) {
 			throw new TenmoServiceException(INVALID_TRANSFER_MSG);
-		}
+		} 
 		 try {
 			 String url = BASE_URL + "/transfers/sendmoney";
-			 HttpEntity<TransferRequest> entity = makeTransferEntity(transfer);
+			 HttpEntity<TransferRequest> entity = makeTransferEntity(transferTo);
 			 return restTemplate.exchange(url, HttpMethod.POST, entity, TransferRequest.class).getBody();
 		    } catch (RestClientResponseException ex) {
 		      throw new TenmoServiceException("Unable to initiate your transfer, please try again later.");
