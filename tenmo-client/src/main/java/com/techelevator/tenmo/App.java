@@ -53,10 +53,14 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("*********************");
 		
 		registerAndLogin();
-		mainMenu();
+		try {
+			mainMenu();
+		} catch (TenmoServiceException e) {
+			System.out.println(e.getMessage());
+			}
 	}
 
-	private void mainMenu() {
+	private void mainMenu() throws TenmoServiceException {
 		while(true) {
 			String choice = (String)console.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 			if(MAIN_MENU_OPTION_VIEW_BALANCE.equals(choice)) {
@@ -93,11 +97,12 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		
 	}
 
-	private void sendBucks() {
+	private void sendBucks() throws TenmoServiceException {
+		int currentUserId = currentUser.getUser().getId();
 		int userToId = promptForUserId();
 		double amountToSend = console.getUserInputDouble("Enter amount");
 		
-//		service.sendMoney(currentUserId, userId, amountToSend);
+		service.sendMoney(currentUser, userToId, amountToSend);
 			
 		}
 		

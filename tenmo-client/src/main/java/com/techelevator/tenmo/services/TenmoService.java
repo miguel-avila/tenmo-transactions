@@ -63,23 +63,23 @@ public class TenmoService {
 	}
 	
 	//TODO fix this somehow
-/*	public TransferRequest sendMoney(AuthenticatedUser currentUser, int toUserId, double amount) throws TenmoServiceException{
-	
-		
-		
+	public TransferRequest sendMoney(AuthenticatedUser currentUser, int toUserId, double amount)
+			throws TenmoServiceException {
+
 		if (toUserId <= 0) {
 			throw new TenmoServiceException(INVALID_TRANSFER_MSG);
-		} 
-		 try {
-			 String url = BASE_URL + "/transfers/sendmoney";
-			 HttpEntity<TransferRequest> entity = makeTransferEntity(currentUser, toUserId, amount);
-			 return restTemplate.exchange(url, HttpMethod.POST, entity, TransferRequest.class).getBody();
-		    } catch (RestClientResponseException ex) {
-		      throw new TenmoServiceException("Unable to initiate your transfer, please try again later.");
-		   
-		      
-		    }
-	}*/
+		}
+		try {
+			String token = currentUser.getToken();
+			HttpEntity entity = AuthenticationService.makeAuthEntity(token);
+			String url = BASE_URL + "/transfers/sendmoney";
+//			HttpEntity<TransferRequest> entity = makeTransferEntity(currentUser, toUserId, amount);
+			return restTemplate.exchange(url, HttpMethod.POST, entity, TransferRequest.class).getBody();
+		} catch (RestClientResponseException ex) {
+			throw new TenmoServiceException("Unable to initiate your transfer, please try again later.");
+
+		}
+	}
 	
 	/*private TransferRequest makeRequest(String CSV)	{
 		String[] parsed = CSV.split(",");
