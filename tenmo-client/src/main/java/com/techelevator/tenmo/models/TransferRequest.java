@@ -5,6 +5,16 @@ public class TransferRequest {
 	private int toUserId;
 	private double amount;
 
+public TransferRequest() {
+		
+		
+	}
+	
+	public TransferRequest(int fromUserId, int toUserId, double amount) {
+		this.fromUserId = fromUserId;
+		this.toUserId = toUserId;
+		this.amount = amount;
+	}
 	public int getFromUserId() {
 		return fromUserId;
 	}

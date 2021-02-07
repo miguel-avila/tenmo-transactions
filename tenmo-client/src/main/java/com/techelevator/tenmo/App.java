@@ -102,7 +102,12 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("Enter User Id to send money to:");
 		String toUserInput = in.nextLine();
 		int userId = console.getUserInputInteger(toUserInput);
-		service.sendMoney(currentUser, userId);
+		System.out.println("Enter amount to send:");
+		double amountToSend = in.nextDouble();
+		User currentUserNew = currentUser.getUser();
+		int currentUserId = currentUserNew.getId();
+		
+		service.sendMoney(currentUserId, userId, amountToSend);
 			
 		}
 		

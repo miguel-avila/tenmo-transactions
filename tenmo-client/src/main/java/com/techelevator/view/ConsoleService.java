@@ -73,4 +73,18 @@ public class ConsoleService {
 		} while(result == null);
 		return result;
 	}
+	/*public Integer getUserInputdouble(String prompt) {
+		Integer result = null;
+		do {
+			out.print(prompt+": ");
+			out.flush();
+			String userInput = in.nextLine();
+			try {
+				result = Integer.parseInt(userInput);
+			} catch(NumberFormatException e) {
+				out.println(System.lineSeparator() + "*** " + userInput + " is not valid ***" + System.lineSeparator());
+			}
+		} while(result == null);
+		return result;
+	}*/
 }
