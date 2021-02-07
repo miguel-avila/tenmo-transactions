@@ -98,11 +98,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() throws TenmoServiceException {
-		int currentUserId = currentUser.getUser().getId();
-		int userToId = promptForUserId();
-		double amountToSend = console.getUserInputDouble("Enter amount");
+		promptForUserId();
+		String toSend = currentUser + console.getUserInput("Enter ID of friend to send Money to and the amount separated by a comma.");
 		
-		service.sendMoney(currentUser, userToId, amountToSend);
+		service.sendMoney(toSend);
 			
 		}
 		
@@ -176,7 +175,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		return new UserCredentials(username, password);
 	}
 	
-	private int promptForUserId() {
+	private void promptForUserId() {
 		System.out.println("-------------------------------------");
 		System.out.println("Users");
 		System.out.println("ID\tName");
@@ -190,7 +189,8 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			}
 		}
 		System.out.println("------------------------------------\n");
-		String promptForId = "Enter ID of user you are sending to (0 to cancel)";
-		return console.getUserInputInteger(promptForId);
+		//String promptForId = "Enter ID of user you are sending to (0 to cancel)";
+		//return console.getUserInputInteger(promptForId);
 	}
+
 }
