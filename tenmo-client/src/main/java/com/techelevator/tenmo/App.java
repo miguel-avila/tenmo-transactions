@@ -11,6 +11,7 @@ import com.techelevator.tenmo.models.TransferRequest;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.tenmo.services.TenmoService;
+import com.techelevator.tenmo.services.TenmoServiceException;
 import com.techelevator.view.ConsoleService;
 
 public class App {
@@ -93,28 +94,17 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
+		int userToId = promptForUserId();
+		double amountToSend = console.getUserInputDouble("Enter amount");
 		
-		User[] allUsers = service.getAllUsers();
-		for (int i = 0; i < allUsers.length; i++) {
-			
-			System.out.println((i+1) + " | " + allUsers[i].getUsername());
-		}
-		System.out.println("Enter User Id to send money to:");
-		String toUserInput = in.nextLine();
-		int userId = console.getUserInputInteger(toUserInput);
-		System.out.println("Enter amount to send:");
-		double amountToSend = in.nextDouble();
-		User currentUserNew = currentUser.getUser();
-		int currentUserId = currentUserNew.getId();
-		
-		service.sendMoney(currentUserId, userId, amountToSend);
+//		service.sendMoney(currentUserId, userId, amountToSend);
 			
 		}
 		
 		
 		// TODO Auto-generated method stub
 		
-	}
+//	}
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
@@ -179,5 +169,23 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		String username = console.getUserInput("Username");
 		String password = console.getUserInput("Password");
 		return new UserCredentials(username, password);
+	}
+	
+	private int promptForUserId() {
+		System.out.println("-------------------------------------");
+		System.out.println("Users");
+		System.out.println("ID\tName");
+		System.out.println("-------------------------------------");
+		
+		User[] allUsers = service.getAllUsers(currentUser);
+		int currentUserId = currentUser.getUser().getId();
+		for (int i = 0; i < allUsers.length; i++) {
+			if(allUsers[i].getId() != currentUserId) {
+				System.out.println(allUsers[i].getId() + "\t" + allUsers[i].getUsername());
+			}
+		}
+		System.out.println("------------------------------------\n");
+		String promptForId = "Enter ID of user you are sending to (0 to cancel)";
+		return console.getUserInputInteger(promptForId);
 	}
 }

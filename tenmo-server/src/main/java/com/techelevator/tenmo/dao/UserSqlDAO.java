@@ -20,7 +20,6 @@ public class UserSqlDAO implements UserDAO {
 
     private static final double STARTING_BALANCE = 1000;
     private JdbcTemplate jdbcTemplate;
-    private List<User> allUsers = new ArrayList<>();
     public UserSqlDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -32,7 +31,7 @@ public class UserSqlDAO implements UserDAO {
 
     @Override
     public List<User> findAll() {
-        
+    	List<User> allUsers = new ArrayList<>();
         String sql = "select * from users";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
@@ -92,9 +91,10 @@ public class UserSqlDAO implements UserDAO {
 		}
 			return account;
 	}
+	
 	@Override
 	public User findUserById(int id){
-		for (User user : allUsers) {
+		for (User user : this.findAll()) {
 			if (user.getId() == id) {
 				return user;
 			}

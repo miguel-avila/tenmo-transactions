@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,21 +35,18 @@ public class TenmoService {
 
 	//Gets Account Balance for a user
 	public Account getBalance(AuthenticatedUser currentUser) {
-		
+		String token = currentUser.getToken(); 
+		HttpEntity entity = AuthenticationService.makeAuthEntity(token);
 		String url = BASE_URL + "user/me/balance";
-		return restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Account.class).getBody();
+		return restTemplate.exchange(url, HttpMethod.GET, entity, Account.class).getBody();
 	}
-	public User[] getAllUsers() throws TenmoServiceException{
-		//int id = currentUser.getUser().getId();
-		
+	
+	public User[] getAllUsers(AuthenticatedUser currentUser) {
+		String token = currentUser.getToken(); 
+		HttpEntity entity = AuthenticationService.makeAuthEntity(token);
 		String url = BASE_URL + "/allusers";
 		User[] allUsers = null;
-		try {
-			allUsers = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
-		} catch (RestClientResponseException ex) {
-			throw new TenmoServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
-		
-		}
+			allUsers = restTemplate.exchange(url, HttpMethod.GET, entity, User[].class).getBody();
 		return allUsers;
 	}
 	
@@ -65,7 +63,7 @@ public class TenmoService {
 	}
 	
 	//TODO fix this somehow
-	public TransferRequest sendMoney(AuthenticatedUser currentUser, int toUserId, double amount) throws TenmoServiceException{
+/*	public TransferRequest sendMoney(AuthenticatedUser currentUser, int toUserId, double amount) throws TenmoServiceException{
 	
 		
 		
@@ -81,7 +79,8 @@ public class TenmoService {
 		   
 		      
 		    }
-	}
+	}*/
+	
 	/*private TransferRequest makeRequest(String CSV)	{
 		String[] parsed = CSV.split(",");
 		if (parsed.length < 2 || parsed.length > )2 {
@@ -111,6 +110,7 @@ public class TenmoService {
 		    HttpEntity<TransferRequest> entity = new HttpEntity<>(transfer, headers);
 		    return entity;
 		  }
+	 
 	private HttpEntity makeAuthEntity() {
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.setBearerAuth(AUTH_TOKEN);

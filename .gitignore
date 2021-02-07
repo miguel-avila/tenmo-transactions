@@ -74,3 +74,4 @@ cypress/screenshots
 cypress/videos
 /tests/e2e/videos/
 /tests/e2e/screenshots/
+database/queries.sql
