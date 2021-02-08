@@ -35,8 +35,7 @@ public class TenmoController {
 	public Account getBalanceForMe(Principal principal) {
 		String username = principal.getName();
 		int userId = this.userDAO.findIdByUsername(username);
-		return userDAO.findBalanceByUserId(userId);
-
+		return userDAO.getAccountByUserId(userId);
 	}
 
 	@RequestMapping(path = "/transfers", method = RequestMethod.GET)
@@ -66,9 +65,10 @@ public class TenmoController {
 			//TODO throw custom exception that throws 403 forbidden
 			throw new IllegalTransferRequest();
 		}
-		
-		return this.transferDAO.create(request.getFromUserId(), request.getToUserId(), request.getAmount());
-
+		int accountFrom = userDAO.getAccountByUserId(request.getFromUserId()).getAccountId();
+		int accountTo = userDAO.getAccountByUserId(request.getToUserId()).getAccountId();
+		return this.transferDAO.create(accountFrom, accountTo, request.getAmount());
+		//TODO Add increase/decrease balance
 	}
 
 	// requestTransfer -- get transfer by transfer-id to -- helper methods
@@ -77,7 +77,6 @@ public class TenmoController {
 		String username = principal.getName();
 		int userId = this.userDAO.findIdByUsername(username);
 		return transferDAO.getTransferById(userId);
-
 	}
 
 }

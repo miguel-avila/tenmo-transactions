@@ -82,7 +82,7 @@ public class UserSqlDAO implements UserDAO {
 
 	//Gets Account Balance for a user
 	@Override
-	public Account findBalanceByUserId(int id) {
+	public Account getAccountByUserId(int id) {
 		Account account = null;
 		String sql = "SELECT account_id, user_id, balance FROM accounts WHERE user_id = ?";
 		SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);

@@ -1,13 +1,10 @@
 package com.techelevator.tenmo;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
-import com.techelevator.tenmo.models.TransferRequest;
-
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.tenmo.services.TenmoService;
@@ -98,11 +95,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() throws TenmoServiceException {
-		promptForUserId();
-		String toSend = currentUser.getUser().getId() + console.getUserInput("Enter ID of friend to send Money to and the amount separated by a comma.");
-		
-		service.sendMoney(toSend);
-			
+		int userToId = promptForUserId();
+		double amountToSend = console.getUserInputDouble("Enter amount");
+		service.sendMoney(currentUser, userToId, amountToSend);			
 		}
 		
 		
@@ -175,7 +170,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		return new UserCredentials(username, password);
 	}
 	
-	private void promptForUserId() {
+	private int promptForUserId() {
 		System.out.println("-------------------------------------");
 		System.out.println("Users");
 		System.out.println("ID\tName");
@@ -189,8 +184,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			}
 		}
 		System.out.println("------------------------------------\n");
-		//String promptForId = "Enter ID of user you are sending to (0 to cancel)";
-		//return console.getUserInputInteger(promptForId);
+		String promptForId = "Enter ID of user you are sending to (0 to cancel)";
+		return console.getUserInputInteger(promptForId);
 	}
-
 }
