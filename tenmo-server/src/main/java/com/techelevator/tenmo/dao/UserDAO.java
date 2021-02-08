@@ -19,4 +19,9 @@ public interface UserDAO {
     Account getAccountByUserId(int userId);
     
     User findUserById(int id) throws UserNotFound;
+    
+    double findBalanceByUserId(int id);
+    
+    public void updateBalance(int accountTo, int accountFrom, double amount);
+    
 }

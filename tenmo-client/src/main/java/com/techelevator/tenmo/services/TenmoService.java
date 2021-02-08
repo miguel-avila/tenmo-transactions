@@ -34,6 +34,7 @@ public class TenmoService {
 		return restTemplate.exchange(url, HttpMethod.GET, entity, Account.class).getBody();
 	}
 	
+	
 	public User[] getAllUsers(AuthenticatedUser currentUser) {
 		String token = currentUser.getToken(); 
 		HttpEntity entity = AuthenticationService.makeAuthEntity(token);
@@ -75,26 +76,6 @@ public class TenmoService {
 			throw new TenmoServiceException("Unable to initiate your transfer, please try again later.");
 		}
 	}
-	
-	/*private TransferRequest makeRequest(String CSV)	{
-		String[] parsed = CSV.split(",");
-		if (parsed.length < 2 || parsed.length > )2 {
-		      return null;
-		    }
-
-		    // Add method does not include an id and only has 5 strings
-		    if (parsed.length == 3) {
-		      // Create a string version of the id and place into an array to be concatenated
-		      String[] withId = new String[3];
-		      String[] idArray = new String[] { new Random().nextInt(1000) + "" };
-		      // place the id into the first position of the data array
-		      System.arraycopy(idArray, 0, withId, 0, 1);
-		      System.arraycopy(parsed, 0, withId, 1, 5);
-		      parsed = withId;
-		    }
-
-		    return new TransferRequest(Integer.parseInt(parsed[1].trim()), Double.parseDouble(parsed[3].trim()));
-		  }*/
 	
 
 	

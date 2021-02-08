@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.techelevator.tenmo.model.InsufficientFundsException;
 import com.techelevator.tenmo.model.Transfer;
 
 @Component
@@ -44,6 +45,36 @@ public class TransferSqlDAO implements TransferDAO {
 		SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
 		if(result.next()) {
 			transfer = mapRowToTransfer(result);
+		}
+		return transfer;
+	}
+	
+	@Override
+	public Transfer transfer(int userId, Transfer transfer) throws Exception {
+		int accountTo = transfer.getAccountTo();
+		int accountFrom = userId;
+		double amount = transfer.getAmount();
+		UserSqlDAO userDAO = new UserSqlDAO(jdbcTemplate);
+		Connection con = this.jdbcTemplate.getDataSource().getConnection();
+		try {
+			con.setAutoCommit(false);
+			double balance = userDAO.findBalanceByUserId(userId);
+			if (balance < amount) {
+				// TODO write a custom exception that uses a 400 status exception
+				throw new InsufficientFundsException();
+			}
+			userDAO.updateBalance(accountTo, accountFrom, amount);
+			// TODO Insert record and read it back
+			String insertTransfer = "INSERT INTO transfers (transfer_type_id,transfer_status_id,account_From, account_To, amount) "
+					+ "VALUES ('2','2', ?, ?, ?);";
+			jdbcTemplate.update(insertTransfer, accountFrom, accountTo, amount);
+			
+			con.commit();
+		} catch (Exception ex) {
+			con.rollback();
+			throw ex;
+		} finally {
+			con.setAutoCommit(true);
 		}
 		return transfer;
 	}

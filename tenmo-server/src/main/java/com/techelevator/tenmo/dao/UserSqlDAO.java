@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.security.Principal;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +92,23 @@ public class UserSqlDAO implements UserDAO {
 		}
 			return account;
 	}
+	@Override
+	public void updateBalance(int accountTo, int accountFrom, double amount) {
+		double accountFromBalance = findBalanceByUserId(accountFrom);
+		accountFromBalance = accountFromBalance - amount;
+		String updateAccountFromSql = "UPDATE accounts SET balance = ? WHERE user_id = ?";
+		jdbcTemplate.update(updateAccountFromSql, accountFromBalance, accountFrom);
+		
+		double accountToBalance = findBalanceByUserId(accountTo);
+		accountToBalance = accountToBalance + amount;
+		String updateAccountToSql = "UPDATE accounts SET balance = ? WHERE user_id = ?";
+		jdbcTemplate.update(updateAccountToSql, accountToBalance, accountTo);
+	}
+	@Override
+	public double findBalanceByUserId(int id) {
+		return jdbcTemplate.queryForObject("SELECT balance FROM accounts WHERE user_id = ?", double.class, id);
 	
+	}
 	@Override
 	public User findUserById(int id){
 		for (User user : this.findAll()) {
@@ -101,6 +118,7 @@ public class UserSqlDAO implements UserDAO {
 		}
 		return null;
 	}
+	
 
 	//creates Account object from SQL row
 	private Account mapRowToAccount(SqlRowSet rs) {
