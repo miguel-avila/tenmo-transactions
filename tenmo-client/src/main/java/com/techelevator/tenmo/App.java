@@ -99,7 +99,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void sendBucks() throws TenmoServiceException {
 		promptForUserId();
-		String toSend = currentUser + console.getUserInput("Enter ID of friend to send Money to and the amount separated by a comma.");
+		String toSend = currentUser.getUser().getId() + console.getUserInput("Enter ID of friend to send Money to and the amount separated by a comma.");
 		
 		service.sendMoney(toSend);
 			
