@@ -81,14 +81,6 @@ public class TenmoController {
 		}
 		return false;
 	}
-	
-	@RequestMapping(path="/transfers/balancedec", method=RequestMethod.POST)
-	public boolean balanceDecrease(@RequestBody TransferRequest request) {
-		int accountFrom = userDAO.getAccountByUserId(request.getFromUserId()).getAccountId();
-		double amount = request.getAmount();
-		
-		return this.transferDAO.decreaseBalance(accountFrom, amount);
-	}
 
 	// requestTransfer -- get transfer by transfer-id to -- helper methods
 	@RequestMapping(path = "/transfers/requesttransfer", method = RequestMethod.GET)

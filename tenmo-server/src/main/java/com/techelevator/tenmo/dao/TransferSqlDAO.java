@@ -2,7 +2,7 @@ package com.techelevator.tenmo.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.sql.Connection;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -55,9 +55,9 @@ public class TransferSqlDAO implements TransferDAO {
 		int accountFrom = userId;
 		double amount = transfer.getAmount();
 		UserSqlDAO userDAO = new UserSqlDAO(jdbcTemplate);
-//		Connection con = this.jdbcTemplate.getDataSource().getConnection();
+		Connection con = this.jdbcTemplate.getDataSource().getConnection();
 		try {
-//			con.setAutoCommit(false);
+			con.setAutoCommit(false);
 			double balance = userDAO.findBalanceByUserId(userId);
 			if (balance < amount) {
 				// TODO write a custom exception that uses a 400 status exception
@@ -69,12 +69,12 @@ public class TransferSqlDAO implements TransferDAO {
 					+ "VALUES ('2','2', ?, ?, ?);";
 			jdbcTemplate.update(insertTransfer, accountFrom, accountTo, amount);
 			
-//			con.commit();
+			con.commit();
 		} catch (Exception ex) {
-//			con.rollback();
+			con.rollback();
 			throw ex;
 		} finally {
-//			con.setAutoCommit(true);
+			con.setAutoCommit(true);
 		}
 		return transfer;
 	}

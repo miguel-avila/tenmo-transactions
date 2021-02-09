@@ -1,8 +1,10 @@
 package com.techelevator.tenmo;
 
+import java.text.NumberFormat;
 import java.util.Scanner;
 
 import com.techelevator.tenmo.models.AuthenticatedUser;
+import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
@@ -85,8 +87,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
-		
+		printTransfers();		
 	}
 
 	private void viewPendingRequests() {
@@ -168,6 +169,20 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		String username = console.getUserInput("Username");
 		String password = console.getUserInput("Password");
 		return new UserCredentials(username, password);
+	}
+	
+	private void printTransfers() {
+		System.out.println("----------------------------------------");
+		System.out.println("Transfers");
+		System.out.println("ID\t\tFrom/To\t\tAmount");
+		System.out.println("----------------------------------------");
+		
+		Transfer[] transfers = service.getTransferHistory(currentUser);
+		for (int i = 0; i < transfers.length; i++) {
+			System.out.println(transfers[i].getTransferId() + "\t\t\t\t" + NumberFormat.getCurrencyInstance().format(transfers[i].getAmount()));
+		}
+		System.out.println("----------------------------------------\n");
+		System.out.println("Enter ID of user you are sending to (0 to cancel)");
 	}
 	
 	private int promptForUserId() {
