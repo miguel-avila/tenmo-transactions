@@ -67,8 +67,27 @@ public class TenmoController {
 		}
 		int accountFrom = userDAO.getAccountByUserId(request.getFromUserId()).getAccountId();
 		int accountTo = userDAO.getAccountByUserId(request.getToUserId()).getAccountId();
-		return this.transferDAO.create(accountFrom, accountTo, request.getAmount());
-		//TODO Add increase/decrease balance
+		double amount = request.getAmount();
+		//increase/decrease balance
+		boolean balanceIncreased = false;
+		boolean transferCreated = false;
+		boolean balanceDecreased = this.transferDAO.decreaseBalance(accountFrom, amount);
+		if(balanceDecreased) {
+			balanceIncreased = this.transferDAO.increaseBalance(accountTo, amount);
+			transferCreated = this.transferDAO.create(accountFrom, accountTo, amount);
+		}
+		if(transferCreated && balanceDecreased && balanceIncreased) {
+			return true;
+		}
+		return false;
+	}
+	
+	@RequestMapping(path="/transfers/balancedec", method=RequestMethod.POST)
+	public boolean balanceDecrease(@RequestBody TransferRequest request) {
+		int accountFrom = userDAO.getAccountByUserId(request.getFromUserId()).getAccountId();
+		double amount = request.getAmount();
+		
+		return this.transferDAO.decreaseBalance(accountFrom, amount);
 	}
 
 	// requestTransfer -- get transfer by transfer-id to -- helper methods

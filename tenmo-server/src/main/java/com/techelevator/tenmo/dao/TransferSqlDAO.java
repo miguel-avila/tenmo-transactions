@@ -55,9 +55,9 @@ public class TransferSqlDAO implements TransferDAO {
 		int accountFrom = userId;
 		double amount = transfer.getAmount();
 		UserSqlDAO userDAO = new UserSqlDAO(jdbcTemplate);
-		Connection con = this.jdbcTemplate.getDataSource().getConnection();
+//		Connection con = this.jdbcTemplate.getDataSource().getConnection();
 		try {
-			con.setAutoCommit(false);
+//			con.setAutoCommit(false);
 			double balance = userDAO.findBalanceByUserId(userId);
 			if (balance < amount) {
 				// TODO write a custom exception that uses a 400 status exception
@@ -69,12 +69,12 @@ public class TransferSqlDAO implements TransferDAO {
 					+ "VALUES ('2','2', ?, ?, ?);";
 			jdbcTemplate.update(insertTransfer, accountFrom, accountTo, amount);
 			
-			con.commit();
+//			con.commit();
 		} catch (Exception ex) {
-			con.rollback();
+//			con.rollback();
 			throw ex;
 		} finally {
-			con.setAutoCommit(true);
+//			con.setAutoCommit(true);
 		}
 		return transfer;
 	}
@@ -106,7 +106,7 @@ public class TransferSqlDAO implements TransferDAO {
 	public boolean decreaseBalance(int accountFrom, double amount) {
 		boolean balanceDecreased = false;
 		String checkBalance = "SELECT balance FROM accounts WHERE account_id = ?";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(checkBalance, accountFrom, double.class);
+		SqlRowSet result = jdbcTemplate.queryForRowSet(checkBalance, accountFrom);
 		double balance = 0.0;
 		if(result.next()) {
 			balance = result.getDouble("balance");
