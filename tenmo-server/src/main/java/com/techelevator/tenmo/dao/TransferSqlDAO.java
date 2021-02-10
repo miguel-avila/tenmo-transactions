@@ -27,9 +27,16 @@ public class TransferSqlDAO implements TransferDAO {
 	@Override
 	public List<Transfer> findAll(int userId) {
 		List<Transfer> transfers = new ArrayList<>();
-		String sql = "SELECT * FROM transfers";
+		String sql = "SELECT t.transfer_id, t.transfer_type_id, t.transfer_status_id, "
+				+ "t.account_from, t.account_to, t.amount, uf.username AS user_from, "
+				+ "ut.username AS user_to, uf.user_id AS user_from_id, ut.user_id AS user_to_id "
+				+ "FROM transfers AS t JOIN accounts AS af ON t.account_from = af.account_id "
+				+ "JOIN users AS uf ON af.user_id = uf.user_id "
+				+ "JOIN accounts AS ato ON t.account_to = ato.account_id "
+				+ "JOIN users AS ut ON ato.user_id = ut.user_id	"
+				+ "WHERE uf.user_id = ? or ut.user_id = ?";
 		
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, userId);
 		while(results.next()) {
 			Transfer transfer = mapRowToTransfer(results);
 			transfers.add(transfer);
@@ -130,6 +137,10 @@ public class TransferSqlDAO implements TransferDAO {
 		transfer.setAccountFrom(rs.getInt("account_from"));
 		transfer.setAccountTo(rs.getInt("account_to"));
 		transfer.setAmount(rs.getDouble("amount"));
+		transfer.setUserFromId(rs.getInt("user_from_id"));
+		transfer.setUserToId(rs.getInt("user_to_id"));
+		transfer.setUserFromName(rs.getString("user_from"));
+		transfer.setUserToName(rs.getString("user_to"));
 		return transfer;
 	}
 	

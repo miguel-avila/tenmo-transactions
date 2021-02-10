@@ -89,6 +89,7 @@ public class TenmoController {
 		int userId = this.userDAO.findIdByUsername(username);
 		return transferDAO.getTransferById(userId);
 	}
+	
 	@RequestMapping(path = "/user/get/balance", method = RequestMethod.GET)
 	public Double getBalance(Principal principal) {
 		

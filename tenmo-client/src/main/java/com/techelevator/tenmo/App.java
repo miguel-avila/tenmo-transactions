@@ -178,8 +178,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("----------------------------------------");
 		
 		Transfer[] transfers = service.getTransferHistory(currentUser);
+		int currentUserId = currentUser.getUser().getId();
 		for (int i = 0; i < transfers.length; i++) {
-			System.out.println(transfers[i].getTransferId() + "\t\t\t\t" + NumberFormat.getCurrencyInstance().format(transfers[i].getAmount()));
+			if(transfers[i].getUserFromId() == currentUserId) {
+				System.out.println(transfers[i].getTransferId() + "\tTo: \t" + transfers[i].getUserToName() + "\t\t" + NumberFormat.getCurrencyInstance().format(transfers[i].getAmount()));
+			} else {
+				System.out.println(transfers[i].getTransferId() + "\tFrom: \t" + transfers[i].getUserFromName() + "\t" + NumberFormat.getCurrencyInstance().format(transfers[i].getAmount()));
+			}
 		}
 		System.out.println("----------------------------------------\n");
 		System.out.println("Enter ID of user you are sending to (0 to cancel)");
