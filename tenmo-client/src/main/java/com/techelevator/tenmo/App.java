@@ -87,7 +87,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewTransferHistory() {
-		printTransfers();		
+		int transferId = printTransfers();		
 	}
 
 	private void viewPendingRequests() {
@@ -98,13 +98,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void sendBucks() throws TenmoServiceException {
 		int userToId = promptForUserId();
 		double amountToSend = console.getUserInputDouble("Enter amount");
-		service.sendMoney(currentUser, userToId, amountToSend);			
+		boolean moneySent = service.sendMoney(currentUser, userToId, amountToSend);
+		if (moneySent) {
+			System.out.println("You just sent $" + amountToSend);
+		} else {
+			System.out.println("Something went wrong");
 		}
-		
-		
-		// TODO Auto-generated method stub
-		
-//	}
+	}		
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
@@ -171,23 +171,25 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		return new UserCredentials(username, password);
 	}
 	
-	private void printTransfers() {
-		System.out.println("----------------------------------------");
+	private int printTransfers() {
+		System.out.println("-----------------------------------------");
 		System.out.println("Transfers");
 		System.out.println("ID\t\tFrom/To\t\tAmount");
-		System.out.println("----------------------------------------");
+		System.out.println("-----------------------------------------");
 		
 		Transfer[] transfers = service.getTransferHistory(currentUser);
 		int currentUserId = currentUser.getUser().getId();
 		for (int i = 0; i < transfers.length; i++) {
+			String strAmount = String.format("%.2f", transfers[i].getAmount());
 			if(transfers[i].getUserFromId() == currentUserId) {
-				System.out.println(transfers[i].getTransferId() + "\tTo: \t" + transfers[i].getUserToName() + "\t\t" + NumberFormat.getCurrencyInstance().format(transfers[i].getAmount()));
+				System.out.printf(transfers[i].getTransferId() + "\tTo: %15s \t$%8s \n", transfers[i].getUserToName(), strAmount);
 			} else {
-				System.out.println(transfers[i].getTransferId() + "\tFrom: \t" + transfers[i].getUserFromName() + "\t" + NumberFormat.getCurrencyInstance().format(transfers[i].getAmount()));
+				System.out.printf(transfers[i].getTransferId() + "\tFrom: %13s \t$%8s \n", transfers[i].getUserFromName(), strAmount);
 			}
 		}
-		System.out.println("----------------------------------------\n");
-		System.out.println("Enter ID of user you are sending to (0 to cancel)");
+		System.out.println("-----------------------------------------\n");
+		String promptForId = "Please enter transfer ID to view details (0 to cancel)";
+		return console.getUserInputInteger(promptForId);
 	}
 	
 	private int promptForUserId() {
