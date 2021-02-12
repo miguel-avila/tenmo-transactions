@@ -1,8 +1,5 @@
 package com.techelevator.tenmo;
 
-import java.text.NumberFormat;
-import java.util.Scanner;
-
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.User;
@@ -15,7 +12,7 @@ import com.techelevator.view.ConsoleService;
 
 public class App {
 
-private static final String API_BASE_URL = "http://localhost:8080/";
+	private static final String API_BASE_URL = "http://localhost:8080/";
     
     private static final String MENU_OPTION_EXIT = "Exit";
     private static final String LOGIN_MENU_OPTION_REGISTER = "Register";
@@ -33,7 +30,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private ConsoleService console;
     private AuthenticationService authenticationService;
     private TenmoService service;
-    private Scanner in;
+//    private Scanner in;
 
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
@@ -56,7 +53,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			mainMenu();
 		} catch (TenmoServiceException e) {
 			System.out.println(e.getMessage());
-			}
+		}
 	}
 
 	private void mainMenu() throws TenmoServiceException {
@@ -92,7 +89,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewPendingRequests() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	private void sendBucks() throws TenmoServiceException {
@@ -108,7 +104,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	private void exitProgram() {
@@ -144,7 +139,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
             	isRegistered = true;
             	System.out.println("Registration successful. You can now login.");
             } catch(AuthenticationServiceException e) {
-            	System.out.println("REGISTRATION ERROR: "+e.getMessage());
+            	System.out.println("REGISTRATION ERROR: " + e.getMessage());
 				System.out.println("Please attempt to register again.");
             }
         }
@@ -159,12 +154,12 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		    try {
 				currentUser = authenticationService.login(credentials);
 			} catch (AuthenticationServiceException e) {
-				System.out.println("LOGIN ERROR: "+e.getMessage());
+				System.out.println("LOGIN ERROR: " + e.getMessage());
 				System.out.println("Please attempt to login again.");
 			}
 		}
 	}
-	
+	 
 	private UserCredentials collectUserCredentials() {
 		String username = console.getUserInput("Username");
 		String password = console.getUserInput("Password");
@@ -182,9 +177,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		for (int i = 0; i < transfers.length; i++) {
 			String strAmount = String.format("%.2f", transfers[i].getAmount());
 			if(transfers[i].getUserFromId() == currentUserId) {
-				System.out.printf(transfers[i].getTransferId() + "\tTo: %15s \t$%8s \n", transfers[i].getUserToName(), strAmount);
+				System.out.printf(transfers[i].getTransferId() + "\tTo: %15s \t$%8s \n", 
+						transfers[i].getUserToName(), strAmount);
 			} else {
-				System.out.printf(transfers[i].getTransferId() + "\tFrom: %13s \t$%8s \n", transfers[i].getUserFromName(), strAmount);
+				System.out.printf(transfers[i].getTransferId() + "\tFrom: %13s \t$%8s \n", 
+						transfers[i].getUserFromName(), strAmount);
 			}
 		}
 		System.out.println("-----------------------------------------\n");

@@ -2,13 +2,12 @@ package com.techelevator.tenmo.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
+//import java.sql.Connection;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.techelevator.tenmo.model.InsufficientFundsException;
+//import com.techelevator.tenmo.model.InsufficientFundsException;
 import com.techelevator.tenmo.model.Transfer;
 
 @Component
@@ -55,7 +54,7 @@ public class TransferSqlDAO implements TransferDAO {
 		}
 		return transfer;
 	}
-	
+/*	
 	@Override
 	public Transfer transfer(int userId, Transfer transfer) throws Exception {
 		int accountTo = transfer.getAccountTo();
@@ -85,16 +84,16 @@ public class TransferSqlDAO implements TransferDAO {
 		}
 		return transfer;
 	}
-
+*/
 	//Step 4.2 Creates a transfer including User IDs and the amount of TE Bucks.
 	@Override
 	public boolean create(int accountFrom, int accountTo, double amount) {
 		boolean transferCreated = false;
 		String insertTransfer = "INSERT INTO transfers (transfer_type_id, "
 				+ "transfer_status_id, account_from, account_to, amount) VALUES "
-				+ "(" + TRANSFER_TYPE_SEND + ", " + TRANSFER_STATUS_APPROVED + ", ?, ?, ?)";
-		transferCreated = jdbcTemplate.update(insertTransfer, accountFrom, accountTo, amount) == 1;
-		
+				+ "(?, ?, ?, ?, ?)";
+		transferCreated = jdbcTemplate.update(insertTransfer, 
+				TRANSFER_TYPE_SEND, TRANSFER_STATUS_APPROVED, accountFrom, accountTo, amount) == 1;
 		return transferCreated;
 	}
 
@@ -104,7 +103,6 @@ public class TransferSqlDAO implements TransferDAO {
 		boolean balanceIncreased = false;
 		String addMoney = "UPDATE accounts SET balance = balance + ? WHERE account_id = ?";
 		balanceIncreased = jdbcTemplate.update(addMoney, amount, accountTo) == 1;
-		
 		return balanceIncreased;
 	}
 
@@ -123,7 +121,6 @@ public class TransferSqlDAO implements TransferDAO {
 			balance -= amount;
 			balanceDecreased = jdbcTemplate.update(substractMoney, balance, accountFrom) == 1;
 		}
-		
 		return balanceDecreased;
 	}
 
@@ -143,5 +140,4 @@ public class TransferSqlDAO implements TransferDAO {
 		transfer.setUserToName(rs.getString("user_to"));
 		return transfer;
 	}
-	
 }

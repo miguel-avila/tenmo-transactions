@@ -1,7 +1,6 @@
 package com.techelevator.tenmo.model;
 
 public class Account {
-
 	private int userId;
 	private int accountId;
 	private double balance;
@@ -31,7 +30,4 @@ public class Account {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
-	
-	
-	
 }

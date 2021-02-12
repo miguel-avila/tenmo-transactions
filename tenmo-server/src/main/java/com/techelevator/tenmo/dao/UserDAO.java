@@ -2,7 +2,7 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserNotFound;
+//import com.techelevator.tenmo.model.UserNotFound;
 
 import java.util.List;
 
@@ -18,10 +18,10 @@ public interface UserDAO {
     
     Account getAccountByUserId(int userId);
     
-    User findUserById(int id) throws UserNotFound;
+//    User findUserById(int id) throws UserNotFound;
     
-    double findBalanceByUserId(int id);
+//    double findBalanceByUserId(int id);
     
-    public void updateBalance(int accountTo, int accountFrom, double amount);
+//    public void updateBalance(int accountTo, int accountFrom, double amount);
     
 }

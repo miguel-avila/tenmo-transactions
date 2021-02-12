@@ -14,16 +14,8 @@ public class TransferRequest {
 	private double amount;
 	
 	public TransferRequest() {
-		
-		
 	}
 	
-	public TransferRequest(int fromUserId, int toUserId, double amount) {
-		this.fromUserId = fromUserId;
-		this.toUserId = toUserId;
-		this.amount = amount;
-	}
-
 	public int getFromUserId() {
 		return fromUserId;
 	}
@@ -47,5 +39,4 @@ public class TransferRequest {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-
 }

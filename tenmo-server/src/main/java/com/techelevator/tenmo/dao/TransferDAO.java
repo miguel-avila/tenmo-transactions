@@ -16,6 +16,6 @@ public interface TransferDAO {
 	
 	boolean decreaseBalance(int accountFrom, double amount);
 	
-	public Transfer transfer(int userId, Transfer transfer) throws Exception;
+//	public Transfer transfer(int userId, Transfer transfer) throws Exception;
 	
 }

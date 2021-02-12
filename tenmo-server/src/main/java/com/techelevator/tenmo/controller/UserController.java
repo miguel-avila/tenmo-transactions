@@ -1,15 +1,13 @@
 package com.techelevator.tenmo.controller;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techelevator.tenmo.dao.UserDAO;
-import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserNotFound;
+//import com.techelevator.tenmo.model.UserNotFound;
 
 @RestController
 public class UserController {
@@ -25,8 +23,8 @@ public class UserController {
 		return userDAO.findAll();
 	}
 	
-	@RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
+/*	@RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
 	public User findUserById(@PathVariable int id) throws UserNotFound{
 		return userDAO.findUserById(id);
-	}
+	}*/
 }

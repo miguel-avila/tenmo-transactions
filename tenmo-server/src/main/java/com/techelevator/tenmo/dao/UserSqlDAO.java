@@ -2,7 +2,7 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserNotFound;
+//import com.techelevator.tenmo.model.UserNotFound;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.security.Principal;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class UserSqlDAO implements UserDAO {
         boolean accountCreated = false;
 
         // create user
-        String insertUser = "insert into users (username,password_hash) values(?,?)";
+        String insertUser = "insert into users (username, password_hash) values(?, ?)";
         String password_hash = new BCryptPasswordEncoder().encode(password);
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -68,20 +67,20 @@ public class UserSqlDAO implements UserDAO {
         userCreated = jdbcTemplate.update(con -> {
                     PreparedStatement ps = con.prepareStatement(insertUser, new String[]{id_column});
                     ps.setString(1, username);
-                    ps.setString(2,password_hash);
+                    ps.setString(2, password_hash);
                     return ps;
                 }
                 , keyHolder) == 1;
         int newUserId = (int) keyHolder.getKeys().get(id_column);
 
         // create account
-        String insertAccount = "insert into accounts (user_id,balance) values(?,?)";
+        String insertAccount = "insert into accounts (user_id, balance) values(?, ?)";
         accountCreated = jdbcTemplate.update(insertAccount,newUserId,STARTING_BALANCE) == 1;
 
         return userCreated && accountCreated;
     }
 
-	//Gets Account Balance for a user
+	//Gets Account for a user
 	@Override
 	public Account getAccountByUserId(int id) {
 		Account account = null;
@@ -92,7 +91,7 @@ public class UserSqlDAO implements UserDAO {
 		}
 			return account;
 	}
-	@Override
+/*	@Override
 	public void updateBalance(int accountTo, int accountFrom, double amount) {
 		double accountFromBalance = findBalanceByUserId(accountFrom);
 		accountFromBalance = accountFromBalance - amount;
@@ -117,7 +116,7 @@ public class UserSqlDAO implements UserDAO {
 			}
 		}
 		return null;
-	}
+	}*/
 	
 
 	//creates Account object from SQL row

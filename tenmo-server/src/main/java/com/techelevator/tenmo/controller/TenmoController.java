@@ -6,7 +6,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,8 +56,6 @@ public class TenmoController {
 	
 	@RequestMapping(path = "/transfers/sendmoney", method = RequestMethod.POST)
 	public boolean sendMoney(@Valid @RequestBody TransferRequest request, Principal principal) throws IllegalTransferRequest {
-		// TODO get userID out of principal like up above, validate that principal id is
-		// == fromUserID
 		String username = principal.getName();
 		int userId = this.userDAO.findIdByUsername(username);
 		if (request.getFromUserId() != userId) {
@@ -90,11 +87,11 @@ public class TenmoController {
 		return transferDAO.getTransferById(userId);
 	}
 	
-	@RequestMapping(path = "/user/get/balance", method = RequestMethod.GET)
+/*	@RequestMapping(path = "/user/get/balance", method = RequestMethod.GET)
 	public Double getBalance(Principal principal) {
 		
 		String userName = principal.getName();
 		int userId = this.userDAO.findIdByUsername(userName);
 		return userDAO.findBalanceByUserId(userId);
-	}
+	}*/
 }

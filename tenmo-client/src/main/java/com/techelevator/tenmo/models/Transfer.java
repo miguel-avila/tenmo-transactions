@@ -15,17 +15,6 @@ public class Transfer {
 	public Transfer() {
 	}
 
-	public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountFrom, int accountTo,
-			double amount) {
-
-		this.transferId = transferId;
-		this.transferTypeId = transferTypeId;
-		this.transferStatusId = transferStatusId;
-		this.accountFrom = accountFrom;
-		this.accountTo = accountTo;
-		this.amount = amount;
-	}
-
 	public long getTransferId() {
 		return transferId;
 	}
@@ -105,7 +94,5 @@ public class Transfer {
 	public void setUserToName(String userToName) {
 		this.userToName = userToName;
 	}
-
-	
 }
 
