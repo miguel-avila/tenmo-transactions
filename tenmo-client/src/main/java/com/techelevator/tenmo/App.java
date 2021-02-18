@@ -83,12 +83,13 @@ public class App {
 		System.out.println("Your current account balance is: $" + balance);
 	}
 
-	private void viewTransferHistory() {
-		int transferId = printTransfers();		
-	}
-
-	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
+	private void viewTransferHistory() throws TenmoServiceException {
+		int transferId = printTransfers();
+		if(transferId == 0) {
+			return;
+		} else {
+			printTransferDetails(transferId);
+		}
 	}
 
 	private void sendBucks() throws TenmoServiceException {
@@ -102,6 +103,10 @@ public class App {
 		}
 	}		
 
+	private void viewPendingRequests() {
+		// TODO Auto-generated method stub
+	}
+	
 	private void requestBucks() {
 		// TODO Auto-generated method stub
 	}
@@ -185,8 +190,38 @@ public class App {
 			}
 		}
 		System.out.println("-----------------------------------------\n");
+		return this.getTransferFromUserInput(transfers);
+	}
+	
+	private int getTransferFromUserInput(Transfer[] transfers) {
 		String promptForId = "Please enter transfer ID to view details (0 to cancel)";
-		return console.getUserInputInteger(promptForId);
+		while(true) { 
+			int transferId = console.getUserInputInteger(promptForId);
+			if(transferId == 0) {
+				return transferId;
+			}
+			for(int i = 0; i < transfers.length; i++) {
+				if(transferId == transfers[i].getTransferId()) {
+					return transferId;
+				}
+			}
+			System.out.println("Please select the ID from the list!");
+		}
+	}
+	
+
+	private void printTransferDetails(int transferId) {
+		System.out.println("\n-----------------------------------------");
+		System.out.println("Transfer Details");
+		System.out.println("-----------------------------------------");
+		
+		Transfer transfer = service.getTransferById(transferId, currentUser);
+		System.out.println("Id: " + transfer.getTransferId());
+		System.out.println("From: " + transfer.getUserFromName());
+		System.out.println("To: " + transfer.getUserToName());
+		System.out.println("Type: " + transfer.getTransferType());
+		System.out.println("Status: " + transfer.getTransferStatus());
+		System.out.printf("Amount: $%.2f\n\n", transfer.getAmount());		
 	}
 	
 	private int promptForUserId() {

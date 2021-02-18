@@ -28,11 +28,14 @@ public class TransferSqlDAO implements TransferDAO {
 		List<Transfer> transfers = new ArrayList<>();
 		String sql = "SELECT t.transfer_id, t.transfer_type_id, t.transfer_status_id, "
 				+ "t.account_from, t.account_to, t.amount, uf.username AS user_from, "
-				+ "ut.username AS user_to, uf.user_id AS user_from_id, ut.user_id AS user_to_id "
+				+ "ut.username AS user_to, uf.user_id AS user_from_id, ut.user_id AS user_to_id, "
+				+ "tt.transfer_type_desc AS transfer_type, ts.transfer_status_desc AS transfer_status "
 				+ "FROM transfers AS t JOIN accounts AS af ON t.account_from = af.account_id "
 				+ "JOIN users AS uf ON af.user_id = uf.user_id "
 				+ "JOIN accounts AS ato ON t.account_to = ato.account_id "
-				+ "JOIN users AS ut ON ato.user_id = ut.user_id	"
+				+ "JOIN users AS ut ON ato.user_id = ut.user_id "
+				+ "JOIN transfer_types AS tt ON t.transfer_type_id = tt.transfer_type_id "
+				+ "JOIN transfer_statuses AS ts ON t.transfer_status_id = ts.transfer_status_id "
 				+ "WHERE uf.user_id = ? or ut.user_id = ?";
 		
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, userId);
@@ -47,44 +50,24 @@ public class TransferSqlDAO implements TransferDAO {
 	@Override
 	public Transfer getTransferById(int id) {
 		Transfer transfer = null;
-		String sql = "SELECT * FROM transfers WHERE transfer_id = ?";
+		String sql = "SELECT t.transfer_id, t.transfer_type_id, t.transfer_status_id, "
+				+ "t.account_from, t.account_to, t.amount, uf.username AS user_from, "
+				+ "ut.username AS user_to, uf.user_id AS user_from_id, ut.user_id AS user_to_id, "
+				+ "tt.transfer_type_desc AS transfer_type, ts.transfer_status_desc AS transfer_status "
+				+ "FROM transfers AS t JOIN accounts AS af ON t.account_from = af.account_id "
+				+ "JOIN users AS uf ON af.user_id = uf.user_id "
+				+ "JOIN accounts AS ato ON t.account_to = ato.account_id "
+				+ "JOIN users AS ut ON ato.user_id = ut.user_id "
+				+ "JOIN transfer_types AS tt ON t.transfer_type_id = tt.transfer_type_id "
+				+ "JOIN transfer_statuses AS ts ON t.transfer_status_id = ts.transfer_status_id "
+				+ "WHERE t.transfer_id = ?";
 		SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
 		if(result.next()) {
 			transfer = mapRowToTransfer(result);
 		}
 		return transfer;
 	}
-/*	
-	@Override
-	public Transfer transfer(int userId, Transfer transfer) throws Exception {
-		int accountTo = transfer.getAccountTo();
-		int accountFrom = userId;
-		double amount = transfer.getAmount();
-		UserSqlDAO userDAO = new UserSqlDAO(jdbcTemplate);
-		Connection con = this.jdbcTemplate.getDataSource().getConnection();
-		try {
-			con.setAutoCommit(false);
-			double balance = userDAO.findBalanceByUserId(userId);
-			if (balance < amount) {
-				// TODO write a custom exception that uses a 400 status exception
-				throw new InsufficientFundsException();
-			}
-			userDAO.updateBalance(accountTo, accountFrom, amount);
-			// TODO Insert record and read it back
-			String insertTransfer = "INSERT INTO transfers (transfer_type_id,transfer_status_id,account_From, account_To, amount) "
-					+ "VALUES ('2','2', ?, ?, ?);";
-			jdbcTemplate.update(insertTransfer, accountFrom, accountTo, amount);
-			
-			con.commit();
-		} catch (Exception ex) {
-			con.rollback();
-			throw ex;
-		} finally {
-			con.setAutoCommit(true);
-		}
-		return transfer;
-	}
-*/
+
 	//Step 4.2 Creates a transfer including User IDs and the amount of TE Bucks.
 	@Override
 	public boolean create(int accountFrom, int accountTo, double amount) {
@@ -138,6 +121,8 @@ public class TransferSqlDAO implements TransferDAO {
 		transfer.setUserToId(rs.getInt("user_to_id"));
 		transfer.setUserFromName(rs.getString("user_from"));
 		transfer.setUserToName(rs.getString("user_to"));
+		transfer.setTransferType(rs.getString("transfer_type"));
+		transfer.setTransferStatus(rs.getString("transfer_status"));
 		return transfer;
 	}
 }

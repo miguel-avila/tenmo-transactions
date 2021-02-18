@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,18 +81,17 @@ public class TenmoController {
 	}
 
 	// requestTransfer -- get transfer by transfer-id to -- helper methods
-	@RequestMapping(path = "/transfers/requesttransfer", method = RequestMethod.GET)
-	public Transfer getTransferWithId(Principal principal) {
+	@RequestMapping(path = "/transfers/{id}", method = RequestMethod.GET)
+	public Transfer getTransferWithId(@PathVariable int id, Principal principal) throws IllegalTransferRequest {
 		String username = principal.getName();
 		int userId = this.userDAO.findIdByUsername(username);
-		return transferDAO.getTransferById(userId);
+		Transfer transfer = transferDAO.getTransferById(id);
+		if (transfer.getUserFromId() != userId && transfer.getUserToId() != userId) {
+			//TODO throw custom exception that throws 403 forbidden
+			throw new IllegalTransferRequest();
+		} else {
+			return transfer;
+		}
 	}
-	
-/*	@RequestMapping(path = "/user/get/balance", method = RequestMethod.GET)
-	public Double getBalance(Principal principal) {
-		
-		String userName = principal.getName();
-		int userId = this.userDAO.findIdByUsername(userName);
-		return userDAO.findBalanceByUserId(userId);
-	}*/
+
 }

@@ -22,9 +22,5 @@ public class UserController {
 	public List<User> listUsers(){
 		return userDAO.findAll();
 	}
-	
-/*	@RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
-	public User findUserById(@PathVariable int id) throws UserNotFound{
-		return userDAO.findUserById(id);
-	}*/
+
 }

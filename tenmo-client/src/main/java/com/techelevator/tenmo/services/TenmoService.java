@@ -39,25 +39,22 @@ public class TenmoService {
 		return restTemplate.exchange(url, HttpMethod.GET, entity, User[].class).getBody();
 	}
 	
+	//Step 5
 	public Transfer[] getTransferHistory(AuthenticatedUser currentUser) {
 		String token = currentUser.getToken(); 
 		HttpEntity entity = AuthenticationService.makeAuthEntity(token);
 		String url = BASE_URL + "/transfers";
 		return restTemplate.exchange(url, HttpMethod.GET, entity, Transfer[].class).getBody();
 	}
-/*	
-	//I may be wrong here but In our app, I feel like we need this method to continue
-	public User getUserbyId(long id) throws TenmoServiceException {
-		String url = BASE_URL + "/user/{id}";
-		User user = null;
-		try {
-			user = restTemplate.exchange(url + id, HttpMethod.GET, makeAuthEntity(), User.class).getBody();
-		} catch (RestClientResponseException ex) {
-		throw new TenmoServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
-		}
-		return user;
+	
+	//Step 6
+	public Transfer getTransferById(int id, AuthenticatedUser currentUser) {
+		String token = currentUser.getToken(); 
+		HttpEntity entity = AuthenticationService.makeAuthEntity(token);
+		String url = BASE_URL + "/transfers/" + id;
+		return restTemplate.exchange(url, HttpMethod.GET, entity, Transfer.class).getBody();
 	}
-	*/
+	
 	public boolean sendMoney(AuthenticatedUser currentUser, int toUserId, double amount)
 			throws TenmoServiceException {
 		TransferRequest request = new TransferRequest();
@@ -86,13 +83,5 @@ public class TenmoService {
 	    HttpEntity<TransferRequest> entity = new HttpEntity<>(transfer, headers);
 	    return entity;
 	 }
-/*	 
-		private HttpEntity makeAuthEntity() {
-		    HttpHeaders headers = new HttpHeaders();
-		    headers.setBearerAuth(AUTH_TOKEN);
-		    HttpEntity entity = new HttpEntity<>(headers);
-		    return entity;
-		  }
-	*/
 
 }

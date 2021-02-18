@@ -90,34 +90,7 @@ public class UserSqlDAO implements UserDAO {
 			account = mapRowToAccount(result);
 		}
 			return account;
-	}
-/*	@Override
-	public void updateBalance(int accountTo, int accountFrom, double amount) {
-		double accountFromBalance = findBalanceByUserId(accountFrom);
-		accountFromBalance = accountFromBalance - amount;
-		String updateAccountFromSql = "UPDATE accounts SET balance = ? WHERE user_id = ?";
-		jdbcTemplate.update(updateAccountFromSql, accountFromBalance, accountFrom);
-		
-		double accountToBalance = findBalanceByUserId(accountTo);
-		accountToBalance = accountToBalance + amount;
-		String updateAccountToSql = "UPDATE accounts SET balance = ? WHERE user_id = ?";
-		jdbcTemplate.update(updateAccountToSql, accountToBalance, accountTo);
-	}
-	@Override
-	public double findBalanceByUserId(int id) {
-		return jdbcTemplate.queryForObject("SELECT balance FROM accounts WHERE user_id = ?", double.class, id);
-	
-	}
-	@Override
-	public User findUserById(int id){
-		for (User user : this.findAll()) {
-			if (user.getId() == id) {
-				return user;
-			}
-		}
-		return null;
-	}*/
-	
+	}	
 
 	//creates Account object from SQL row
 	private Account mapRowToAccount(SqlRowSet rs) {

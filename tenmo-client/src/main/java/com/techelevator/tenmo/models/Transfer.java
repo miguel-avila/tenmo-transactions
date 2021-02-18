@@ -3,7 +3,25 @@ package com.techelevator.tenmo.models;
 public class Transfer {
 	private int transferId;
 	private int transferTypeId;
+	private String transferType;
 	private int transferStatusId;
+	private String transferStatus;
+	public String getTransferType() {
+		return transferType;
+	}
+
+	public void setTransferType(String transferType) {
+		this.transferType = transferType;
+	}
+
+	public String getTransferStatus() {
+		return transferStatus;
+	}
+
+	public void setTransferStatus(String transferStatus) {
+		this.transferStatus = transferStatus;
+	}
+
 	private int accountFrom;
 	private int accountTo;
 	private double amount;
